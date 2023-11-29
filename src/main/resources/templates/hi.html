@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--  <p th:text="'안녕하세요. ' + ${msg}">안녕 반가워!</p>-->
+
+    <!-- 타임리프 표현식과 문법-->
+    <p th:text="'안녕하세요 ' + ${hello}"></p>
+    <p th:utext="${uText}">안녕</p>
+    <input type="text" th:value="${value}"/>
+    <p th:with="temp=${withValue}" th:text="${temp}"></p>
+    <a th:href="@{/{id}(id=${link})}">Link 1 (hi)</a><br>
+    <a th:href="@{/hi}">Link 2 (hi)</a><br>
+    <a th:href="@{https://www.google.com}">Google</a><br>
+    <img th:src="${imgSrc}"/>
+
+    <div th:switch="${userRole}">
+        <p th:case="'admin'">Hello, Admin</p>
+        <p th:case="'user'">Hello, user</p>
+        <p th:case="*">Hello, Unknown</p>
+    </div>
+
+    <div>
+        <p th:if="${isAdmin}">Welcome, Admin</p>
+        <p th:unless="${isAdmin}">Welcome, User</p>
+    </div>
+
+    <ul>
+        <li th:each="name:${names}" th:text="${name}"></li>
+    </ul>
+
+    <div th:text="${classHello.getAge()}"></div>
+</body>
+</html>
