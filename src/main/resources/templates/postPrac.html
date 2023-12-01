@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>post로 정보 받기</title>
+  <style>
+    form {
+      width: 300px;
+    }
+    form fieldset {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<form action="/postPrac" method="post">
+  <label for="name">이름 <input type="text" name="name" id="name" /></label>
+  <fieldset>
+    <legend>성별</legend>
+    <label for="male"
+    >남자<input type="radio" name="gender" id="male" value="male"
+    /></label>
+    <label for="female"
+    >여자<input type="radio" name="gender" id="female" value="female"
+    /></label>
+  </fieldset>
+  <fieldset>
+    <legend>생년월일</legend>
+    <select name="year" id="year">
+      <option value="1950">1950</option>
+      <option value="1951">1951</option>
+      <option value="1952">1952</option>
+    </select>
+    년
+
+    <select name="month" id="month">
+      <th:block th:each="num : ${#numbers.sequence(1, 12)}">
+        <option th:text="${num}" th:value="${num}"></option>
+      </th:block>
+    </select>
+    월
+
+    <select name="day" id="day">
+      <th:block th:each="num : ${#numbers.sequence(1, 31)}">
+        <option th:text="${num}" th:value="${num}"></option>
+      </th:block>
+    </select>
+    일
+  </fieldset>
+  <fieldset>
+    <legend>관심사</legend>
+    <label for="trip"
+    ><input type="checkbox" name="hobby" id="trip" value="trip" />
+      여행</label
+    >
+    <label for="fashion"
+    ><input type="checkbox" name="hobby" id="fashion" value="fashion" />
+      패션</label
+    >
+    <label for="food"
+    ><input type="checkbox" name="hobby" id="food" value="food" />
+      음식</label
+    >
+  </fieldset>
+  <button>회원가입</button>
+</form>
+</body>
+</html>
