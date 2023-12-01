@@ -3,6 +3,10 @@ package sesac.sesacspringboot.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sesac.sesacspringboot.dto.UserDTO;
+import sesac.sesacspringboot.vo.UserVO;
+
+import java.util.Arrays;
 
 @Controller
 // @RestController: Controller 면서 모든 메소드가 @ResponseBody 를 갖도록 하는 어노테이션
@@ -105,4 +109,121 @@ public class MainController {
     return "postPrac";
   }
 
+  @GetMapping("/dto/response1")
+  @ResponseBody
+  public String dtoResponse1(@ModelAttribute UserDTO userDTO) {
+    // 변수로 값을 하나씩 가져오는 게 아니라 객체에 값을 담아서 가져오고 싶을 때 사용하는 방법
+    // @ModelAttribute: html 폼 데이터를 컨트롤러로 전달할 때 객체에 매핑해주는 역할
+    // 매핑 = setter 함수 실행
+    // -> ?name=&age= -> setName() setAge()
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/dto/response2")
+  @ResponseBody
+  public String dtoResponse2(UserDTO userDTO) {
+    // 아무것도 없는 상태 = @ModelAttribute 상태
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/dto/response3")
+  @ResponseBody
+  public String dtoResponse3(@RequestBody UserDTO userDTO) {
+    // @RequestBody: 요청의 본문에 있는 데이터(body)를 받아와서 객체에 매핑(필드값에 값을 주입 = 내가 만든 setter가 아닌 필드 자체에 값을 넣는 방식)
+    // 전달받은 요청의 형식이 json 또는 xml 일 때에만 실행 가능
+    // 일반폼전송 = www-x-form-urlencoded
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  // get 방식 - vo = null (modelattribute = setter 함수를 실행)
+  // post - vo = null
+  // post 방식 - vo - requestbody = 오류
+  @GetMapping("/vo/response1")
+  @ResponseBody
+  public String voResponse1(UserVO userVO) {
+    String msg = "이름 : " + userVO.getName() + ", 나이: " + userVO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/vo/response2")
+  @ResponseBody
+  public String voResponse2(UserVO userVO) {
+    String msg = "이름 : " + userVO.getName() + ", 나이: " + userVO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/vo/response3")
+  @ResponseBody
+  public String voResponse3(@RequestBody UserVO userVO) {
+    String msg = "이름 : " + userVO.getName() + ", 나이: " + userVO.getAge();
+    return msg;
+  }
+
+  @GetMapping("/axios/response1")
+  @ResponseBody
+  public String axiosAPI1(@RequestParam(value = "name") String name, @RequestParam(value = "age") String age) {
+    String msg = "이름 : " + name + ", 나이: " + age;
+    return msg;
+  }
+
+  @GetMapping("/axios/response2")
+  @ResponseBody
+  public String axiosAPI2(UserDTO userDTO) {
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/axios/response3")
+  @ResponseBody
+  public String axiosAPI3(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "age", required = false) String age) {
+    // @RequestParam = @ModelAttribute = query string 으로 넘어온 데이터를 읽을 수 있다.
+    // json으로 데이터가 넘어와서 데이터 자체는 넘어왔지만 json을 읽을 수 없어 안 넘어온것처럼 인식
+    // 데이터가 없는 상황에서 @RequestParam에 required가 true => 에러
+    String msg = "이름 : " + name + ", 나이: " + age;
+    return msg;
+  }
+
+  @PostMapping("/axios/response4")
+  @ResponseBody
+  public String axiosAPI4(UserDTO userDTO) {
+    // ModelAttribute 는 json으로 넘어온 데이터를 읽지 못한다! (setter 함수는 실행하지만, json 을 인식하지 못함) -> null
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  @PostMapping("/axios/response5")
+  @ResponseBody
+  public String axiosAPI5(@RequestBody UserDTO userDTO) {
+    String msg = "이름 : " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    return msg;
+  }
+
+  // axios get - (RequestParam) - ? > o
+  // axios get - dto > o
+  // axios post - (RequestParam) -> required가 false일 때는 null, true일 때는 x
+  // axios post - requestbody x dto -> null
+  // axios post - requestbody o dto -> o
+
+//  Get 일반 : 가능
+//  GET VO : null = @modelAttribute (setter 함수를 실행할 수 없어서)
+//  Post 일반 : 실패
+//  Post VO - RequestBody X: null
+//  Post VO - RequestBody O: 가능 = setter 함수 실행할 수 없어도 매핑 가능
+
+  // 실습
+  @GetMapping("/dynamicForm")
+  public String dynamicForm() {
+    return "dynamicForm";
+  }
+
+  @PostMapping("/axios/dynamicForm")
+  @ResponseBody
+  public String dynamicForm(@RequestBody UserVO userVO) {
+//    String msg = "이름 : " + userVO.getName() + ", 성별: " + userVO.getGender() + ", 생년월일: " + userVO.getBirth() + ", 관심사: " + userVO.getHobby();
+    System.out.println(userVO.getName() + userVO.getGender() + userVO.getBirth() + Arrays.toString(userVO.getHobby()));
+    return userVO.getName();
+  }
 }
